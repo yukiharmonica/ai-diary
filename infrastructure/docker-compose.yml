@@ -75,6 +75,9 @@ services:
             MYSQL_USER: user
             MYSQL_PASSWORD: password
             TZ: 'Asia/Tokyo'
+        ports:
+            # ホストからの接続用
+            - '3306:3306'
         volumes:
             # データをホスト側に永続化
             - db_data:/var/lib/mysql
