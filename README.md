@@ -705,6 +705,37 @@ npm install
 
 ---
 
+## Git管理
+
+このプロジェクトはモノレポとして管理されています。
+
+### GitHubリポジトリへの接続
+
+新しいGitHubリポジトリに接続する場合：
+
+```bash
+cd /home/ubuntu/aiDiary
+
+# GitHubリポジトリを作成後、以下を実行
+git remote add origin https://github.com/<username>/<repository-name>.git
+git push -u origin main
+```
+
+### 既存リポジトリのバックアップ
+
+モノレポ化前の既存リポジトリは以下にバックアップされています：
+
+- `web-app/.git.bak` - 旧web-appリポジトリ
+- `infrastructure/.git.bak` - 旧infrastructureリポジトリ
+
+不要な場合は削除してください：
+
+```bash
+rm -rf web-app/.git.bak infrastructure/.git.bak
+```
+
+---
+
 ## 参考リンク
 
 - [Laravel 12 Documentation](https://laravel.com/docs/12.x)
