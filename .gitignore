@@ -1,0 +1,60 @@
+# IDEs
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Backup files
+*.bak
+
+# Docker
+infrastructure/.env.docker
+
+# Laravel (web-app)
+web-app/.env
+web-app/.env.backup
+web-app/.phpunit.result.cache
+web-app/vendor/
+web-app/node_modules/
+web-app/public/hot
+web-app/public/storage
+web-app/public/build/
+web-app/storage/*.key
+web-app/storage/app/*
+!web-app/storage/app/.gitkeep
+!web-app/storage/app/public
+web-app/storage/framework/cache/*
+!web-app/storage/framework/cache/.gitkeep
+web-app/storage/framework/sessions/*
+!web-app/storage/framework/sessions/.gitkeep
+web-app/storage/framework/testing/*
+!web-app/storage/framework/testing/.gitkeep
+web-app/storage/framework/views/*
+!web-app/storage/framework/views/.gitkeep
+web-app/storage/logs/*
+!web-app/storage/logs/.gitkeep
+web-app/storage/pail/*
+!web-app/storage/pail/.gitkeep
+web-app/bootstrap/cache/*
+!web-app/bootstrap/cache/.gitkeep
+
+# NPM
+npm-debug.log
+yarn-error.log
+
+# Composer
+composer.phar
+
+# Environment files
+.env.local
+.env.*.local
