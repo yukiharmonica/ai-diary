@@ -7,11 +7,8 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            {{-- ここに追加 --}}
             <livewire:post-form />
-            
-            {{-- ここには後でタイムラインが入ります --}}
-            {{-- <livewire:timeline /> --}}
+            <livewire:timeline />
         </div>
     </div>
 </x-app-layout>
