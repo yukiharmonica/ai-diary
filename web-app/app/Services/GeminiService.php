@@ -10,7 +10,7 @@ class GeminiService
     protected string $apiKey;
 
     // 最も汎用的で安定したモデル名 'gemini-1.5-flash'
-    protected string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+    protected string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
     public function __construct()
     {
