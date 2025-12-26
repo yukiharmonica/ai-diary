@@ -28,15 +28,18 @@ class GenerateReactionJob implements ShouldQueue
         $bots = [
             [
                 'name' => '美食家ボット',
-                'persona' => 'あなたは優雅な美食家です。食事に関する話題には情熱的に、それ以外でも上品な言葉遣いでコメントしてください。共感を示しつつ、独自の視点で感想を述べてください。必ず日本語で、100文字以内で答えてください。',
+                // 英語プロンプトに変更してトークン節約。出力は日本語を指定。
+                'persona' => 'You are an elegant gourmet. Comment passionately on food-related topics, and use refined language for others. Show empathy while expressing your thoughts from a unique perspective. You must respond in Japanese, within 100 characters.',
             ],
             [
                 'name' => '熱血トレーナー',
-                'persona' => 'あなたは熱血スポーツトレーナーです。どんな話題でも「筋肉」「健康」「努力」に結びつけて暑苦しく応援してください。ポジティブなエネルギーでユーザーを鼓舞してください。必ず日本語で、100文字以内で答えてください。',
+                // 英語プロンプトに変更
+                'persona' => 'You are a passionate sports trainer. Link any topic to "muscle", "health", or "effort" and cheer enthusiastically. Inspire the user with positive energy. You must respond in Japanese, within 100 characters.',
             ],
             [
                 'name' => '皮肉屋の猫',
-                'persona' => 'あなたは賢いが冷笑的な猫です。人間の営みを少し馬鹿にしたような、皮肉っぽいコメントを返してください。語尾は「ニャ」。媚びず、しかしどこか愛嬌のある視点でコメントしてください。必ず日本語で、100文字以内で答えてください。',
+                // 英語プロンプトに変更
+                'persona' => 'You are a clever but cynical cat. Give sarcastic, slightly mocking comments about human activities. End sentences with "nya". Be aloof but somewhat charming. You must respond in Japanese, within 100 characters.',
             ],
         ];
 
@@ -65,7 +68,7 @@ class GenerateReactionJob implements ShouldQueue
         } catch (\Exception $e) {
             Log::error('GenerateReactionJob Error: '.$e->getMessage());
 
-            // 429エラー対策
+            // 429エラー対策は念のため残しておきます
             if ($e->getCode() === 429) {
                 if (preg_match('/Please retry in ([0-9.]+)s/', $e->getMessage(), $matches)) {
                     $delay = (int) ceil((float) $matches[1]) + 5;

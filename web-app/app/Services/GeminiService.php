@@ -9,7 +9,8 @@ class GeminiService
 {
     protected string $apiKey;
 
-    protected string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+    // 最も汎用的で安定したモデル名 'gemini-1.5-flash'
+    protected string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
     public function __construct()
     {
@@ -27,13 +28,14 @@ class GeminiService
     {
         $url = "{$this->baseUrl}?key={$this->apiKey}";
 
-        // プロンプトの構築
         $payload = [
             'contents' => [
                 [
                     'role' => 'user',
                     'parts' => [
-                        ['text' => "以下の設定になりきって、ユーザーの投稿にリアクションしてください。\n\n【設定】\n{$systemPrompt}\n\n【ユーザーの投稿】\n{$userPost}"],
+                        // 【変更】指示文を英語化してトークンを節約
+                        // 日本語: "以下の設定になりきって、ユーザーの投稿にリアクションしてください。..."
+                        ['text' => "Act as the persona defined below and react to the user's post.\n\n[Persona]\n{$systemPrompt}\n\n[User Post]\n{$userPost}"],
                     ],
                 ],
             ],
@@ -48,17 +50,15 @@ class GeminiService
                 ->post($url, $payload);
 
             if ($response->failed()) {
-                Log::error('Gemini API Error:', $response->json());
-
-                return null;
+                Log::error('Gemini API Error Detail:', $response->json());
+                $response->throw();
             }
 
             return $response->json('candidates.0.content.parts.0.text');
 
         } catch (\Exception $e) {
-            Log::error('Gemini Connection Error: '.$e->getMessage());
-
-            return null;
+            Log::error('Gemini API Connection Error: '.$e->getMessage());
+            throw $e;
         }
     }
 }
