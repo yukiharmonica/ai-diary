@@ -19,7 +19,10 @@ RUN apk update && apk add --no-cache \
     libxml2 \
     bash \
     sudo \
-    shadow
+    shadow \
+    tzdata \
+    nodejs \
+    npm
 
 # ビルドステージ: PHP拡張機能のコンパイル
 FROM base AS builder
