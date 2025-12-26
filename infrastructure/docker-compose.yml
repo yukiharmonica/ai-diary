@@ -1,5 +1,3 @@
-version: '3.8'
-
 networks:
     ai_diary_network:
         driver: bridge
