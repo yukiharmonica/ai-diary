@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Jobs\GenerateReactionJob;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -12,7 +13,9 @@ class PostForm extends Component
 
     public string $genre = '日常'; // デフォルト値
 
-    // バリデーションルール
+    /**
+     * @var array<string, string>
+     */
     protected $rules = [
         'text' => 'required|string|max:400',
         'genre' => 'required|string',
@@ -25,7 +28,7 @@ class PostForm extends Component
         $this->validate();
 
         // 投稿を保存 (Userモデルのリレーション経由)
-        Auth::user()->posts()->create([
+        $post = Auth::user()->posts()->create([
             'text' => $this->text,
             'genre' => $this->genre,
             'status' => 'pending', // 初期状態はAI処理待ち
@@ -37,7 +40,8 @@ class PostForm extends Component
         // 完了メッセージを表示
         session()->flash('message', '日記を投稿しました！AIの反応を待っています...');
 
-        // TODO: 次のステップでAIジョブのディスパッチ処理を追加します
+        // AI生成ジョブをキューに登録（バックグラウンド実行）
+        GenerateReactionJob::dispatch($post);
     }
 
     public function render()
