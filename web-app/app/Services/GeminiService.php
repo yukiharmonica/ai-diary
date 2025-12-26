@@ -39,7 +39,7 @@ class GeminiService
             ],
             'generationConfig' => [
                 'temperature' => 0.7,
-                'maxOutputTokens' => 150, // 文字数制限
+                'maxOutputTokens' => 1000,
             ],
         ];
 
