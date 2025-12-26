@@ -1,8 +1,12 @@
 <div class="bg-white p-6 rounded-lg shadow-md mb-6">
     <form wire:submit="save">
-        {{-- フラッシュメッセージ --}}
+        {{-- フラッシュメッセージ (Alpine.jsで5秒後に自動消去) --}}
         @if (session()->has('message'))
-            <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg border border-green-200">
+            <div x-data="{ show: true }"
+                 x-show="show"
+                 x-transition.duration.500ms
+                 x-init="setTimeout(() => show = false, 5000)"
+                 class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg border border-green-200">
                 {{ session('message') }}
             </div>
         @endif
