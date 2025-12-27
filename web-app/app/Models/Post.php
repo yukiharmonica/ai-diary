@@ -11,6 +11,19 @@ class Post extends Model
 {
     use HasFactory;
 
+    // キー: DB保存値 / 値: フォーム表示ラベル
+    public const GENRES = [
+        '日常' => '日常 - Daily Life',
+        'グルメ' => 'グルメ - Gourmet',
+        '運動' => '運動・健康 - Fitness',
+        '読書' => '読書 - Reading',
+        '学習' => '学習・自己啓発 - Learning',
+        '仕事' => '仕事・キャリア - Work',
+        '旅行' => '旅行・お出かけ - Travel',
+        '趣味' => '趣味・エンタメ - Hobby',
+        'その他' => 'その他 - Others',
+    ];
+
     protected $fillable = [
         'user_id',
         'text',
@@ -18,13 +31,11 @@ class Post extends Model
         'genre',
     ];
 
-    // ユーザーとのリレーション
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // リアクションとのリレーション
     public function reactions(): HasMany
     {
         return $this->hasMany(Reaction::class);

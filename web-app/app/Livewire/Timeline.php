@@ -10,11 +10,8 @@ use Carbon\Carbon;
 class Timeline extends Component
 {
     public ?string $targetDate = null;
-    
-    // 【追加】ジャンル絞り込み用プロパティ
     public ?string $selectedGenre = null;
-    public array $genres = ['日常', 'グルメ', '運動', '読書', '仕事'];
-
+    
     protected $listeners = [
         'refreshTimeline' => '$refresh',
         'date-selected' => 'setTargetDate',
@@ -28,14 +25,9 @@ class Timeline extends Component
     public function clearFilter()
     {
         $this->targetDate = null;
-        // ジャンル選択は保持したまま日付だけ解除したい場合はこのまま
-        // ジャンルもリセットしたい場合は $this->selectedGenre = null; を追加
         $this->dispatch('date-selected', date: null);
     }
 
-    /**
-     * 【追加】ジャンルを選択する処理
-     */
     public function selectGenre($genre)
     {
         $this->selectedGenre = $genre === 'null' ? null : $genre;
@@ -48,12 +40,10 @@ class Timeline extends Component
             ->with('reactions')
             ->latest();
 
-        // 日付絞り込み
         if ($this->targetDate) {
             $query->whereDate('created_at', $this->targetDate);
         }
 
-        // 【追加】ジャンル絞り込み
         if ($this->selectedGenre) {
             $query->where('genre', $this->selectedGenre);
         }
@@ -64,6 +54,8 @@ class Timeline extends Component
             'posts' => $posts,
             'isFiltered' => !is_null($this->targetDate),
             'displayDate' => $this->targetDate ? Carbon::parse($this->targetDate)->isoFormat('Y年M月D日(ddd)') : null,
+            // 【変更】モデルからジャンルキー（'日常', 'グルメ'...）を取得して渡す
+            'genres' => array_keys(Post::GENRES),
         ]);
     }
 }
