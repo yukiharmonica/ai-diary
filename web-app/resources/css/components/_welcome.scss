@@ -1,67 +1,69 @@
 @layer components {
     .welcome-container {
-        @apply min-h-screen bg-gray-50 flex flex-col font-sans;
+        @apply min-h-screen bg-white flex flex-col font-sans text-slate-900 overflow-hidden relative;
+    }
+
+    /* 背景装飾（巨大な薄い文字） */
+    .welcome-bg-text {
+        @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[15rem] md:text-[20rem] font-black text-indigo-50/50 pointer-events-none select-none z-0 whitespace-nowrap;
     }
 
     .welcome-nav {
-        @apply w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center;
+        @apply w-full max-w-7xl mx-auto px-6 py-8 flex justify-between items-center relative z-10;
     }
 
     .welcome-logo {
-        @apply text-2xl font-extrabold text-indigo-600 tracking-tight flex items-center gap-2;
+        @apply text-lg font-bold tracking-widest uppercase flex items-center gap-2 text-indigo-900;
     }
 
     .welcome-nav-link {
-        @apply font-semibold text-gray-600 hover:text-indigo-600 transition duration-150;
+        @apply text-sm font-bold text-slate-400 hover:text-indigo-600 transition duration-300 tracking-wider;
     }
 
     /* ヒーローセクション */
     .hero-section {
-        @apply flex-1 flex flex-col items-center justify-center text-center px-4 py-20 md:py-32;
-    }
-
-    .hero-badge {
-        @apply inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-sm font-bold mb-8 shadow-sm;
+        @apply flex-1 flex flex-col items-center justify-center text-center px-6 relative z-10;
     }
 
     .hero-title {
-        @apply text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight;
+        @apply text-6xl md:text-8xl font-black text-slate-900 tracking-normal mb-8 leading-tight;
+        span {
+            @apply text-indigo-600;
+        }
     }
 
     .hero-subtitle {
-        @apply text-xl text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed;
+        @apply text-lg md:text-xl text-slate-500 mb-12 max-w-2xl mx-auto font-medium leading-relaxed;
     }
 
+    /* ボタンエリア */
     .hero-buttons {
-        @apply flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto;
+        @apply flex flex-col gap-4 justify-center items-center w-full sm:w-auto;
     }
 
     .hero-btn-primary {
-        @apply px-8 py-4 bg-indigo-600 text-white rounded-full font-bold text-lg shadow-lg hover:bg-indigo-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-2;
+        @apply w-full sm:w-64 px-10 py-4 bg-indigo-600 text-white rounded-full font-bold text-sm tracking-widest hover:bg-indigo-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 text-center;
     }
 
     .hero-btn-secondary {
-        @apply px-8 py-4 bg-white text-gray-700 border-2 border-gray-200 rounded-full font-bold text-lg shadow-sm hover:border-indigo-600 hover:text-indigo-600 hover:-translate-y-1 transition-all duration-200;
+        /* 【修正】枠線を太く(border-2)し、色をインディゴにして視認性を向上 */
+        @apply w-full sm:w-64 px-10 py-4 bg-white text-indigo-600 border-2 border-indigo-600 rounded-full font-bold text-sm tracking-widest hover:bg-indigo-50 transition-all duration-300 text-center shadow-md hover:shadow-xl hover:-translate-y-1;
     }
 
-    /* 特徴セクション */
-    .features-grid {
-        @apply grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto px-6 py-24;
+    /* ミニマルな特徴リスト */
+    .features-minimal {
+        @apply flex flex-wrap justify-center gap-8 md:gap-16 py-16 text-slate-400 relative z-10;
     }
 
-    .feature-card {
-        @apply bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300;
+    .feature-item {
+        @apply flex items-center gap-2 text-sm font-bold tracking-wider;
+        svg {
+            @apply w-5 h-5 text-indigo-400;
+        }
     }
 
-    .feature-icon {
-        @apply w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 mb-6;
-    }
-
-    .feature-title {
-        @apply text-xl font-bold text-gray-900 mb-3;
-    }
-
-    .feature-desc {
-        @apply text-gray-600 leading-relaxed;
+    /* フッター */
+    .welcome-footer {
+        @apply py-6 text-center text-xs text-slate-300 relative z-10;
     }
 }

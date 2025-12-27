@@ -17,14 +17,14 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(default: route('home', absolute: false), navigate: true);
     }
 }; ?>
 
 <div>
-    <div class="mb-6">
-        <h2 class="auth-title">おかえりなさい</h2>
-        <p class="auth-subtitle">アカウントにログインして日記を続けましょう</p>
+    {{-- ヘッダー部分：シンプルにタイトルのみ、中央寄せ --}}
+    <div class="mb-8 text-center">
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight">Welcome Back</h2>
     </div>
 
     <!-- Session Status -->
@@ -33,14 +33,14 @@ new #[Layout('layouts.guest')] class extends Component
     <form wire:submit="login">
         <!-- Email Address -->
         <div class="auth-input-group">
-            <label for="email" class="auth-label">{{ __('Email') }}</label>
+            <label for="email" class="auth-label">Email</label>
             <input wire:model="form.email" id="email" class="auth-input" type="email" name="email" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('form.email')" class="auth-error" />
         </div>
 
         <!-- Password -->
         <div class="auth-input-group">
-            <label for="password" class="auth-label">{{ __('Password') }}</label>
+            <label for="password" class="auth-label">Password</label>
             <input wire:model="form.password" id="password" class="auth-input" type="password" name="password" required autocomplete="current-password" />
             <x-input-error :messages="$errors->get('form.password')" class="auth-error" />
         </div>
@@ -49,28 +49,30 @@ new #[Layout('layouts.guest')] class extends Component
         <div class="block mt-4 mb-6">
             <label for="remember" class="inline-flex items-center">
                 <input wire:model="form.remember" id="remember" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                <span class="ms-2 text-sm text-gray-600">Remember me</span>
             </label>
         </div>
 
-        <div class="mt-4">
-            <button class="auth-submit-btn">
-                {{ __('Log in') }}
+        <div class="mt-6">
+            <button class="auth-submit-btn w-full">
+                LOG IN
             </button>
         </div>
 
-        <div class="flex items-center justify-center mt-6 gap-4">
+        {{-- フッターリンク：英語化してレイアウト調整 --}}
+        <div class="flex flex-col items-center justify-center mt-8 gap-4">
             @if (Route::has('password.request'))
-                <a class="auth-link" href="{{ route('password.request') }}" wire:navigate>
-                    {{ __('Forgot your password?') }}
+                <a class="auth-link text-gray-400 hover:text-gray-600" href="{{ route('password.request') }}" wire:navigate>
+                    Forgot your password?
                 </a>
             @endif
             
-            <span class="text-gray-300">|</span>
-
-            <a class="auth-link font-bold text-indigo-600" href="{{ route('register') }}" wire:navigate>
-                新規登録はこちら
-            </a>
+            <div class="text-sm text-gray-500">
+                Don't have an account? 
+                <a class="auth-link font-bold text-indigo-600" href="{{ route('register') }}" wire:navigate>
+                    Sign up
+                </a>
+            </div>
         </div>
     </form>
 </div>
