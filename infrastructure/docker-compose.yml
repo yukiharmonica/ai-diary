@@ -1,3 +1,5 @@
+version: '3.8'
+
 networks:
     ai_diary_network:
         driver: bridge
@@ -17,6 +19,10 @@ services:
             - ai_diary_network
         volumes:
             - ../web-app:/var/www/html
+        # 【追加】Vite(5173)とReverb(8080)のポートを公開
+        ports:
+            - '5173:5173'
+            - '8080:8080'
         # 【修正1】env_fileをやめ、直接記述に戻して確実性を高める
         environment:
             DB_CONNECTION: mysql
@@ -31,6 +37,14 @@ services:
             APP_DEBUG: 'true'
             APP_URL: http://localhost
             TZ: 'Asia/Tokyo'
+            # Reverb / WebSocket設定 (開発用ダミー値)
+            BROADCAST_CONNECTION: reverb
+            REVERB_APP_ID: app_id
+            REVERB_APP_KEY: app_key
+            REVERB_APP_SECRET: app_secret
+            REVERB_HOST: "0.0.0.0" # サーバー側はバインド用に0.0.0.0でOK
+            REVERB_PORT: 8080
+            REVERB_SCHEME: http
         healthcheck:
             test: ["CMD-SHELL", "php-fpm -t || exit 1"]
             interval: 30s
@@ -135,6 +149,15 @@ services:
             QUEUE_CONNECTION: redis
             APP_ENV: local
             TZ: 'Asia/Tokyo'
+            # Reverb設定 (QueueWorker用)
+            BROADCAST_CONNECTION: reverb
+            REVERB_APP_ID: app_id
+            REVERB_APP_KEY: app_key
+            REVERB_APP_SECRET: app_secret
+            # 【重要】ワーカーから見たReverbサーバーのホスト名は "app"
+            REVERB_HOST: app 
+            REVERB_PORT: 8080
+            REVERB_SCHEME: http
         command: php artisan queue:work redis --tries=3 --timeout=60
         depends_on:
             app:

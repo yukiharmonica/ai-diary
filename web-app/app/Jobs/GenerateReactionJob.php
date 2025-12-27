@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\ReactionGenerated;
 use App\Models\Post;
 use App\Services\GeminiService;
 use Illuminate\Bus\Queueable;
@@ -60,10 +61,16 @@ class GenerateReactionJob implements ShouldQueue
                             'response_text' => trim($responseText),
                         ]
                     );
+
+                    // 【追加】1体完了するたびにイベントを発火し、逐次画面を更新させる
+                    ReactionGenerated::dispatch($this->post);
                 }
             }
 
             $this->post->update(['status' => 'completed']);
+
+            // 最終完了通知（ステータス変更の反映用）
+            ReactionGenerated::dispatch($this->post);
 
         } catch (\Exception $e) {
             Log::error('GenerateReactionJob Error: '.$e->getMessage());

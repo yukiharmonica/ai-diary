@@ -1,7 +1,7 @@
 <div 
     id="timeline-start"
     class="space-y-8 scroll-mt-24"
-    wire:poll.5s
+    {{-- 【削除】wire:poll.5s を削除しました --}}
     x-data
     x-on:post-created.window="
         setTimeout(() => {
@@ -14,6 +14,7 @@
     
     {{-- ジャンルフィルター --}}
     <div class="flex flex-wrap gap-2 mb-4">
+    {{-- (以下変更なし) --}}
         <button 
             wire:click="selectGenre('null')"
             class="genre-filter-btn {{ is_null($selectedGenre) ? 'genre-filter-btn-active' : 'genre-filter-btn-default' }}"
@@ -49,7 +50,6 @@
     @endif
 
     @foreach ($posts as $post)
-        {{-- 【修正】classに group を追加 --}}
         <div class="timeline-card group">
             
             {{-- 完了ステータスの装飾バー --}}

@@ -3,20 +3,35 @@
 namespace App\Livewire;
 
 use App\Models\Post;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Carbon\Carbon;
 
 class Timeline extends Component
 {
     public ?string $targetDate = null;
+
     public ?string $selectedGenre = null;
 
-    protected $listeners = [
-        'refreshTimeline' => '$refresh',
-        'date-selected' => 'setTargetDate',
-        'post-created' => '$refresh', // 【追加】投稿完了時にリストを即座に更新
-    ];
+    public int $userId; // 【追加】ユーザーIDプロパティ
+
+    public function mount()
+    {
+        $this->userId = Auth::id(); // 【追加】初期化時にIDをセット
+    }
+
+    // 動的リスナー定義
+    public function getListeners()
+    {
+        return [
+            'refreshTimeline' => '$refresh',
+            'date-selected' => 'setTargetDate',
+            'post-created' => '$refresh',
+
+            // 【修正】イベント名の先頭にドット(.)を付け、broadcastAsで定義した名前を指定
+            "echo-private:users.{$this->userId},.reaction.generated" => '$refresh',
+        ];
+    }
 
     public function setTargetDate($date)
     {
@@ -53,7 +68,7 @@ class Timeline extends Component
 
         return view('livewire.timeline', [
             'posts' => $posts,
-            'isFiltered' => !is_null($this->targetDate),
+            'isFiltered' => ! is_null($this->targetDate),
             'displayDate' => $this->targetDate ? Carbon::parse($this->targetDate)->isoFormat('Y年M月D日(ddd)') : null,
             'genres' => array_keys(Post::GENRES),
         ]);
