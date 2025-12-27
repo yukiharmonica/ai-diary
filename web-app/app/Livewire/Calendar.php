@@ -35,10 +35,10 @@ class Calendar extends Component
         // すでに選択されている日をクリックした場合は解除（トグル）するならここを調整
         if ($this->selectedDate === $date) {
             $this->selectedDate = null;
-            $this->dispatch('dateSelected', date: null); // フィルタ解除
+            $this->dispatch('date-selected', date: null); // フィルタ解除
         } else {
             $this->selectedDate = $date;
-            $this->dispatch('dateSelected', date: $date);
+            $this->dispatch('date-selected', date: $date);
         }
     }
 
