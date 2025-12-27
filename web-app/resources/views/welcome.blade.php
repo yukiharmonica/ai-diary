@@ -3,7 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ config('app.name', 'AIリアクション日記') }}</title>
+        <title>{{ config('app.name', 'AI Diary') }}</title>
+        
+        <!-- Favicon -->
+        <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,8 +20,9 @@
             {{-- ナビゲーション --}}
             <nav class="welcome-nav">
                 <div class="welcome-logo">
-                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7L12 12L22 7L12 2Z"/><path d="M2 17L12 22L22 17"/><path d="M2 12L12 17L22 12"/></svg>
-                    AI Diary
+                    {{-- ロゴコンポーネントを使用するように変更 --}}
+                    <x-application-logo class="w-8 h-8" />
+                    {{ config('app.name', 'AI Diary') }}
                 </div>
                 <div>
                     @if (Route::has('login'))
