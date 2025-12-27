@@ -19,11 +19,9 @@ services:
             - ai_diary_network
         volumes:
             - ../web-app:/var/www/html
-        # 【追加】Vite(5173)とReverb(8080)のポートを公開
+        # 【変更】8080ポートはreverbサービスに移動するため削除
         ports:
             - '5173:5173'
-            - '8080:8080'
-        # 【修正1】env_fileをやめ、直接記述に戻して確実性を高める
         environment:
             DB_CONNECTION: mysql
             DB_HOST: db
@@ -37,12 +35,12 @@ services:
             APP_DEBUG: 'true'
             APP_URL: http://localhost
             TZ: 'Asia/Tokyo'
-            # Reverb / WebSocket設定 (開発用ダミー値)
+            # Reverb設定
             BROADCAST_CONNECTION: reverb
             REVERB_APP_ID: app_id
             REVERB_APP_KEY: app_key
             REVERB_APP_SECRET: app_secret
-            REVERB_HOST: "0.0.0.0" # サーバー側はバインド用に0.0.0.0でOK
+            REVERB_HOST: "0.0.0.0"
             REVERB_PORT: 8080
             REVERB_SCHEME: http
         healthcheck:
@@ -149,13 +147,13 @@ services:
             QUEUE_CONNECTION: redis
             APP_ENV: local
             TZ: 'Asia/Tokyo'
-            # Reverb設定 (QueueWorker用)
+            # Reverb設定
             BROADCAST_CONNECTION: reverb
             REVERB_APP_ID: app_id
             REVERB_APP_KEY: app_key
             REVERB_APP_SECRET: app_secret
-            # 【重要】ワーカーから見たReverbサーバーのホスト名は "app"
-            REVERB_HOST: app 
+            # ワーカーから見たReverbホストはサービス名の 'reverb'
+            REVERB_HOST: reverb 
             REVERB_PORT: 8080
             REVERB_SCHEME: http
         command: php artisan queue:work redis --tries=3 --timeout=60
@@ -165,6 +163,47 @@ services:
             redis:
                 condition: service_healthy
             db:
+                condition: service_healthy
+
+    # ----------------------------------------------------
+    # 6. Laravel Reverb Server (WebSocket) 【追加】
+    # ----------------------------------------------------
+    reverb:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: laravel-reverb
+        container_name: ai_diary_reverb
+        restart: always
+        networks:
+            - ai_diary_network
+        volumes:
+            - ../web-app:/var/www/html
+        environment:
+            DB_CONNECTION: mysql
+            DB_HOST: db
+            DB_PORT: 3306
+            DB_DATABASE: ai_diary_db
+            DB_USERNAME: user
+            DB_PASSWORD: password
+            REDIS_HOST: redis
+            APP_ENV: local
+            TZ: 'Asia/Tokyo'
+            # Reverb設定
+            BROADCAST_CONNECTION: reverb
+            REVERB_APP_ID: app_id
+            REVERB_APP_KEY: app_key
+            REVERB_APP_SECRET: app_secret
+            REVERB_HOST: "0.0.0.0"
+            REVERB_PORT: 8080
+            REVERB_SCHEME: http
+        # 起動コマンド: Reverbサーバーを開始
+        command: php artisan reverb:start
+        # ポート公開
+        ports:
+            - '8080:8080'
+        depends_on:
+            redis:
                 condition: service_healthy
 
 volumes:
