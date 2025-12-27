@@ -11,10 +11,11 @@ class Timeline extends Component
 {
     public ?string $targetDate = null;
     public ?string $selectedGenre = null;
-    
+
     protected $listeners = [
         'refreshTimeline' => '$refresh',
         'date-selected' => 'setTargetDate',
+        'post-created' => '$refresh', // 【追加】投稿完了時にリストを即座に更新
     ];
 
     public function setTargetDate($date)
@@ -54,7 +55,6 @@ class Timeline extends Component
             'posts' => $posts,
             'isFiltered' => !is_null($this->targetDate),
             'displayDate' => $this->targetDate ? Carbon::parse($this->targetDate)->isoFormat('Y年M月D日(ddd)') : null,
-            // 【変更】モデルからジャンルキー（'日常', 'グルメ'...）を取得して渡す
             'genres' => array_keys(Post::GENRES),
         ]);
     }

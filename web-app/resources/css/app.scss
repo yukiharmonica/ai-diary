@@ -1,0 +1,10 @@
+// コンポーネントごとのスタイル定義を読み込む
+// Sassの仕様上、@use は他のルール（@tailwindなど）より前に記述する必要があります
+@use 'components/base';
+@use 'components/calendar';
+@use 'components/timeline';
+@use 'components/post-form';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
