@@ -1,0 +1,53 @@
+@layer components {
+    .profile-container {
+        @apply max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8 py-12;
+    }
+
+    .profile-card {
+        @apply bg-white p-8 rounded-2xl shadow-lg border border-gray-100 relative overflow-hidden;
+    }
+
+    .profile-card-header-bar {
+        @apply absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-400 to-purple-500;
+    }
+
+    .profile-section-header {
+        @apply mb-6;
+    }
+
+    .profile-title {
+        @apply text-xl font-bold text-gray-800 mb-1 flex items-center;
+    }
+
+    .profile-description {
+        @apply text-sm text-gray-500;
+    }
+
+    .profile-form-group {
+        @apply mb-6 max-w-xl;
+    }
+
+    .profile-label {
+        @apply block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 ml-1;
+    }
+
+    .profile-input {
+        @apply w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-3 px-4 bg-gray-50 focus:bg-white transition-colors;
+    }
+
+    .profile-error {
+        @apply text-red-500 text-xs mt-1 ml-1 block;
+    }
+
+    .profile-btn-primary {
+        @apply inline-flex items-center px-6 py-2.5 bg-indigo-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-md hover:shadow-lg;
+    }
+
+    .profile-btn-danger {
+        @apply inline-flex items-center px-6 py-2.5 bg-red-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-md hover:shadow-lg;
+    }
+
+    .profile-btn-secondary {
+        @apply inline-flex items-center px-6 py-2.5 bg-white border border-gray-300 rounded-xl font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150;
+    }
+}
