@@ -13,8 +13,11 @@
                 <div class="md:col-span-1 space-y-6">
                     <livewire:post-form />
                     
-                    <div class="sticky top-6">
+                    <div class="sticky top-6 space-y-6">
                         <livewire:calendar />
+                        
+                        {{-- 【追加】AIチーム選択ウィジェット --}}
+                        <livewire:bot-selector />
                     </div>
                 </div>
 

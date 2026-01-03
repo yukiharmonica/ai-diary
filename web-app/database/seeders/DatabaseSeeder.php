@@ -15,14 +15,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // 設定ファイルからボット情報を取得
+        $botsConfig = config('ai_bots');
+
+        // デフォルトとして使用するボット名を取得（最初の3体、または存在しなければ空配列）
+        $bot1Name = $botsConfig[0]['name'] ?? 'Bot 1';
+        $bot2Name = $botsConfig[1]['name'] ?? 'Bot 2';
+        $bot3Name = $botsConfig[2]['name'] ?? 'Bot 3';
+
+        // ユーザーの初期選択ボットリスト（最初の3体）
+        $defaultSelectedBots = collect($botsConfig)->take(3)->pluck('name')->toArray();
+
         // 1. テスト用ユーザーの作成
-        // ログイン情報: email=test@example.com / password=password
         $user = User::firstOrCreate(
             ['email' => 'test@example.com'],
             [
                 'name' => 'テストユーザー',
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
+                // 設定ファイルから動的に取得したボット名を使用
+                'selected_bots' => $defaultSelectedBots,
             ]
         );
 
@@ -37,16 +49,18 @@ class DatabaseSeeder extends Seeder
             'created_at' => now()->subHours(2),
         ]);
 
+        // 設定ファイルの1番目のボットを使用
         Reaction::create([
             'post_id' => $post1->id,
-            'bot_name' => '美食家ボット',
+            'bot_name' => $bot1Name,
             'bot_persona_id' => 1,
             'response_text' => 'ボーノ！濃厚なカルボナーラとは、まさに至福の時ですね。卵とチーズの黄金比率を感じ取れましたか？ティラミスでの締めくくりも完璧です。素晴らしい食体験に乾杯！',
         ]);
 
+        // 設定ファイルの2番目のボットを使用
         Reaction::create([
             'post_id' => $post1->id,
-            'bot_name' => '熱血トレーナー',
+            'bot_name' => $bot2Name,
             'bot_persona_id' => 2,
             'response_text' => 'カーボローディング完了だな！そのエネルギーを無駄にするなよ！食べた分だけスクワットだ！明日はそのカロリーを筋肉に変えるためにジムへGO！',
         ]);
@@ -62,14 +76,15 @@ class DatabaseSeeder extends Seeder
 
         Reaction::create([
             'post_id' => $post2->id,
-            'bot_name' => '熱血トレーナー',
+            'bot_name' => $bot2Name,
             'bot_persona_id' => 2,
             'response_text' => 'ナイスファイト！！その痛みは成長痛だ！筋肉が喜んでいる証拠だぞ！プロテインを飲んで、超回復を待て！君ならフルマラソンも夢じゃない！',
         ]);
 
+        // 設定ファイルの3番目のボットを使用
         Reaction::create([
             'post_id' => $post2->id,
-            'bot_name' => '皮肉屋の猫',
+            'bot_name' => $bot3Name,
             'bot_persona_id' => 3,
             'response_text' => '人間って不思議だニャ。わざわざ自分を痛めつけて喜ぶなんて。こたつで丸まってる方がよっぽど幸せだと思うけどニャ。まあ、お大事に。',
         ]);
@@ -85,7 +100,7 @@ class DatabaseSeeder extends Seeder
 
         Reaction::create([
             'post_id' => $post3->id,
-            'bot_name' => '皮肉屋の猫',
+            'bot_name' => $bot3Name,
             'bot_persona_id' => 3,
             'response_text' => 'ふーん、人間界の上下関係って大変だニャ。でも、怒ってる上司の顔を猫だと思えば笑えるかもよ？ カリカリでも食べて元気出すニャ。',
         ]);

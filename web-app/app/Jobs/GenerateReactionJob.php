@@ -26,30 +26,27 @@ class GenerateReactionJob implements ShouldQueue
     {
         $this->post->update(['status' => 'processing']);
 
-        $bots = [
-            [
-                'name' => '美食家ボット',
-                // 英語プロンプトに変更してトークン節約。出力は日本語を指定。
-                'persona' => 'You are an elegant gourmet. Comment passionately on food-related topics, and use refined language for others. Show empathy while expressing your thoughts from a unique perspective. You must respond in Japanese, within 100 characters.',
-            ],
-            [
-                'name' => '熱血トレーナー',
-                // 英語プロンプトに変更
-                'persona' => 'You are a passionate sports trainer. Link any topic to "muscle", "health", or "effort" and cheer enthusiastically. Inspire the user with positive energy. You must respond in Japanese, within 100 characters.',
-            ],
-            [
-                'name' => '皮肉屋の猫',
-                // 英語プロンプトに変更
-                'persona' => 'You are a clever but cynical cat. Give sarcastic, slightly mocking comments about human activities. End sentences with "nya". Be aloof but somewhat charming. You must respond in Japanese, within 100 characters.',
-            ],
-        ];
+        // 1. 全ボット定義を取得
+        $allBots = config('ai_bots', []);
+
+        // 2. ユーザーが選択しているボット名リストを取得
+        $selectedBotNames = $this->post->user->selected_bots;
+
+        // 未設定（nullや空）の場合は、設定ファイルの最初の3体をデフォルトとする
+        if (empty($selectedBotNames)) {
+            $selectedBotNames = collect($allBots)->take(3)->pluck('name')->toArray();
+        }
+
+        // 3. 実行するボットをフィルタリング
+        $targetBots = array_filter($allBots, function ($bot) use ($selectedBotNames) {
+            return in_array($bot['name'], $selectedBotNames);
+        });
 
         try {
-            foreach ($bots as $bot) {
-                // 【変更】有料枠であれば制限が緩いため、待機時間を1秒に短縮して高速化
+            foreach ($targetBots as $bot) {
                 sleep(1);
 
-                $responseText = $gemini->generateReaction($bot['persona'], $this->post->text);
+                $responseText = $gemini->generateReaction($bot['system_prompt'], $this->post->text);
 
                 if ($responseText) {
                     $this->post->reactions()->updateOrCreate(
@@ -62,20 +59,16 @@ class GenerateReactionJob implements ShouldQueue
                         ]
                     );
 
-                    // 【追加】1体完了するたびにイベントを発火し、逐次画面を更新させる
                     ReactionGenerated::dispatch($this->post);
                 }
             }
 
             $this->post->update(['status' => 'completed']);
-
-            // 最終完了通知（ステータス変更の反映用）
             ReactionGenerated::dispatch($this->post);
 
         } catch (\Exception $e) {
             Log::error('GenerateReactionJob Error: '.$e->getMessage());
 
-            // 429エラー対策は念のため残しておきます
             if ($e->getCode() === 429) {
                 if (preg_match('/Please retry in ([0-9.]+)s/', $e->getMessage(), $matches)) {
                     $delay = (int) ceil((float) $matches[1]) + 5;

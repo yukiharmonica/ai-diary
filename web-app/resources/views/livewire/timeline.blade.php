@@ -1,8 +1,9 @@
 <div 
     id="timeline-start"
-    class="space-y-8 scroll-mt-24"
-    {{-- 【削除】wire:poll.5s を削除しました --}}
+    class="space-y-8 scroll-mt-24" {{-- スクロールした時にヘッダーに隠れないよう余白を設定 --}}
+    wire:poll.5s
     x-data
+    {{-- 【修正】投稿完了イベント時、スマホ画面（幅768px未満）の場合のみスクロール --}}
     x-on:post-created.window="
         setTimeout(() => {
             if (window.innerWidth < 768) {
@@ -14,7 +15,6 @@
     
     {{-- ジャンルフィルター --}}
     <div class="flex flex-wrap gap-2 mb-4">
-    {{-- (以下変更なし) --}}
         <button 
             wire:click="selectGenre('null')"
             class="genre-filter-btn {{ is_null($selectedGenre) ? 'genre-filter-btn-active' : 'genre-filter-btn-default' }}"
@@ -68,9 +68,7 @@
                 </div>
 
                 {{-- 投稿本文 --}}
-                <p class="text-gray-800 text-lg leading-relaxed whitespace-pre-wrap font-medium">
-                    {{ $post->text }}
-                </p>
+                <p class="text-gray-800 text-lg leading-relaxed whitespace-pre-wrap font-medium">{{ $post->text }}</p>
             </div>
 
             {{-- 2. AI処理中の表示 --}}

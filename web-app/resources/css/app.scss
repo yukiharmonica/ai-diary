@@ -6,6 +6,7 @@
 @use 'components/welcome';
 @use 'components/auth';
 @use 'components/profile';
+@use 'components/bot-selector';
 
 @tailwind base;
 @tailwind components;
