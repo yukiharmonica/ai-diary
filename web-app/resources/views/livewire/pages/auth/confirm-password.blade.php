@@ -9,19 +9,13 @@ new #[Layout('layouts.guest')] class extends Component
 {
     public string $password = '';
 
-    /**
-     * Confirm the current user's password.
-     */
     public function confirmPassword(): void
     {
         $this->validate([
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::guard('web')->validate([
-            'email' => Auth::user()->email,
-            'password' => $this->password,
-        ])) {
+        if (! Auth::attempt(['email' => Auth::user()->email, 'password' => $this->password])) {
             throw ValidationException::withMessages([
                 'password' => __('auth.password'),
             ]);
@@ -29,34 +23,31 @@ new #[Layout('layouts.guest')] class extends Component
 
         session(['auth.password_confirmed_at' => time()]);
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(default: route('home', absolute: false), navigate: true);
     }
 }; ?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600">
+    <div class="mb-8 text-center">
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight">Confirm Password</h2>
+    </div>
+
+    <div class="mb-6 text-sm text-gray-600 text-center">
         {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
     </div>
 
     <form wire:submit="confirmPassword">
         <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="password"
-                          id="password"
-                          class="block mt-1 w-full"
-                          type="password"
-                          name="password"
-                          required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="auth-input-group">
+            <label for="password" class="auth-label">Password</label>
+            <input wire:model="password" id="password" class="auth-input" type="password" name="password" required autocomplete="current-password" />
+            <x-input-error :messages="$errors->get('password')" class="auth-error" />
         </div>
 
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
+        <div class="mt-8">
+            <button class="auth-submit-btn w-full">
+                CONFIRM
+            </button>
         </div>
     </form>
 </div>

@@ -1,0 +1,13 @@
+// コンポーネントごとのスタイル定義を読み込む
+@use 'components/base';
+@use 'components/calendar';
+@use 'components/timeline';
+@use 'components/post-form';
+@use 'components/welcome';
+@use 'components/auth';
+@use 'components/profile';
+@use 'components/bot-selector';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

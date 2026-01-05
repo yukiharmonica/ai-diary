@@ -1,0 +1,41 @@
+@layer components {
+    .post-form-card {
+        @apply bg-white p-6 rounded-2xl shadow-lg border border-gray-100 mb-8 relative overflow-hidden;
+    }
+
+    .post-form-header-bar {
+        @apply absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-400 to-purple-500;
+    }
+
+    .post-form-title {
+        @apply text-lg font-bold text-gray-800 mb-4 flex items-center;
+    }
+
+    .post-form-alert {
+        @apply mb-6 p-4 bg-green-50 text-green-700 rounded-xl border border-green-200 flex items-center shadow-sm;
+    }
+
+    .post-form-label {
+        @apply block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 ml-1;
+    }
+
+    .post-form-select {
+        @apply w-full pl-4 pr-10 py-3 border-gray-200 rounded-xl shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 appearance-none bg-gray-50 transition-colors hover:bg-white cursor-pointer;
+    }
+
+    .post-form-textarea {
+        @apply w-full p-4 border-gray-200 rounded-xl shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 resize-none bg-gray-50 focus:bg-white transition-colors;
+    }
+
+    .post-form-submit-btn {
+        @apply relative inline-flex items-center justify-center px-8 py-3 bg-indigo-600 border border-transparent rounded-xl font-bold text-white shadow-md hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform active:scale-95;
+    }
+
+    .post-form-disabled-box {
+        @apply bg-gray-50 p-8 rounded-2xl border-2 border-dashed border-gray-200 text-center;
+    }
+
+    .post-form-back-btn {
+        @apply inline-flex items-center px-6 py-3 bg-white border border-gray-300 rounded-xl font-bold text-gray-700 shadow-sm hover:bg-gray-50 hover:text-indigo-600 hover:border-indigo-300 transition-all duration-200;
+    }
+}

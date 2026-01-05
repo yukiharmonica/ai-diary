@@ -1,0 +1,50 @@
+@layer components {
+    .bot-selector-card {
+        @apply bg-white p-6 rounded-2xl shadow-lg border border-gray-100 relative overflow-hidden;
+    }
+
+    .bot-selector-header {
+        @apply flex items-center justify-between mb-4;
+    }
+
+    .bot-selector-title {
+        @apply text-lg font-bold text-gray-800 flex items-center;
+    }
+
+    .bot-list {
+        @apply space-y-3;
+    }
+
+    /* ボット選択のラジオ/チェックボックス風デザイン */
+    .bot-option-label {
+        @apply relative flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200;
+    }
+
+    /* 未選択状態 */
+    .bot-option-label-default {
+        @apply border-gray-100 bg-white hover:border-indigo-200 hover:bg-indigo-50;
+    }
+
+    /* 選択状態 */
+    .bot-option-label-selected {
+        @apply border-indigo-500 bg-indigo-50 shadow-sm ring-1 ring-indigo-500;
+    }
+
+    /* ボットアイコン */
+    .bot-option-icon {
+        @apply w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mr-3 flex-shrink-0 transition-colors;
+    }
+
+    .bot-option-icon-default {
+        @apply bg-gray-100 text-gray-400;
+    }
+
+    .bot-option-icon-selected {
+        @apply bg-indigo-500 text-white;
+    }
+
+    /* 保存ボタン */
+    .bot-save-btn {
+        @apply w-full mt-4 py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+}

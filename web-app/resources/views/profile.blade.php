@@ -5,25 +5,28 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    <livewire:profile.update-profile-information-form />
-                </div>
-            </div>
+    <div class="profile-container">
+        <!-- AIチーム設定 -->
+        <div class="profile-card">
+            <div class="profile-card-header-bar"></div>
+            <livewire:profile.update-bot-selection-form />
+        </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    <livewire:profile.update-password-form />
-                </div>
-            </div>
+        <!-- 基本情報更新 -->
+        <div class="profile-card">
+            <div class="profile-card-header-bar"></div>
+            <livewire:profile.update-profile-information-form />
+        </div>
+        
+        <!-- パスワード更新、アカウント削除など -->
+        <div class="profile-card">
+            <div class="profile-card-header-bar"></div>
+            <livewire:profile.update-password-form />
+        </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    <livewire:profile.delete-user-form />
-                </div>
-            </div>
+        <div class="profile-card border-red-100">
+            <div class="absolute top-0 left-0 w-full h-1 bg-red-400"></div>
+            <livewire:profile.delete-user-form />
         </div>
     </div>
 </x-app-layout>
