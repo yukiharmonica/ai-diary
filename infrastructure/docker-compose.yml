@@ -17,7 +17,6 @@ services:
             - ai_diary_network
         volumes:
             - ../web-app:/var/www/html
-        # 【変更】8080ポートはreverbサービスに移動するため削除
         ports:
             - '5173:5173'
         environment:
@@ -33,7 +32,6 @@ services:
             APP_DEBUG: 'true'
             APP_URL: http://localhost
             TZ: 'Asia/Tokyo'
-            # Reverb設定
             BROADCAST_CONNECTION: reverb
             REVERB_APP_ID: app_id
             REVERB_APP_KEY: app_key
@@ -164,7 +162,7 @@ services:
                 condition: service_healthy
 
     # ----------------------------------------------------
-    # 6. Laravel Reverb Server (WebSocket) 【追加】
+    # 6. Laravel Reverb Server (WebSocket) 
     # ----------------------------------------------------
     reverb:
         build:
@@ -195,9 +193,7 @@ services:
             REVERB_HOST: "0.0.0.0"
             REVERB_PORT: 8080
             REVERB_SCHEME: http
-        # 起動コマンド: Reverbサーバーを開始
         command: php artisan reverb:start
-        # ポート公開
         ports:
             - '8080:8080'
         depends_on:

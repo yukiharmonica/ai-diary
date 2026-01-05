@@ -1,11 +1,10 @@
 <div 
     x-data="{ isVisible: true }"
-    {{-- 日付がnull（全件表示）または「今日の日付」の場合にフォームを表示する --}}
+    {{-- 日付がnullまたは今日の場合のみフォーム表示 --}}
     x-on:date-selected.window="isVisible = ($event.detail.date === null || $event.detail.date === '{{ now()->format('Y-m-d') }}')"
-    class="mb-8 relative" {{-- 【修正】オーバーレイのために relative を追加 --}}
+    class="mb-8 relative"
 >
-    {{-- 1. 投稿フォーム --}}
-    {{-- 常に表示するが、不可時は薄くして操作不能にする --}}
+    {{-- 投稿フォーム本体 --}}
     <div 
         class="post-form-card transition-all duration-300"
         :class="{ 'opacity-40 pointer-events-none filter blur-[1px]': !isVisible }"
@@ -18,7 +17,7 @@
         </h3>
 
         <form wire:submit="save">
-            {{-- フラッシュメッセージ --}}
+            {{-- 成功時のフラッシュメッセージ --}}
             @if (session()->has('message'))
                 <div x-data="{ show: true }"
                      x-show="show"

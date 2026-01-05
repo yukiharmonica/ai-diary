@@ -11,7 +11,6 @@ class Post extends Model
 {
     use HasFactory;
 
-    // キー: DB保存値 / 値: フォーム表示ラベル
     public const GENRES = [
         '日常' => '日常 - Daily Life',
         'グルメ' => 'グルメ - Gourmet',

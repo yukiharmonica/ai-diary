@@ -1,9 +1,5 @@
-# Dockerfile
-# マルチステージビルドでイメージサイズを最適化
 FROM php:8.3-fpm-alpine AS base
 
-# システムパッケージのインストール
-# ランタイム依存パッケージのみ
 RUN apk update && apk add --no-cache \
     mysql-client \
     git \
@@ -24,10 +20,8 @@ RUN apk update && apk add --no-cache \
     nodejs \
     npm
 
-# ビルドステージ: PHP拡張機能のコンパイル
 FROM base AS builder
 
-# ビルド依存パッケージのインストール
 RUN apk add --no-cache --virtual .build-deps \
     icu-dev \
     libzip-dev \
@@ -40,8 +34,6 @@ RUN apk add --no-cache --virtual .build-deps \
     pcre-dev \
     $PHPIZE_DEPS
 
-# PHP拡張機能の構成とインストール
-# openssl, session, tokenizer, curl, mbstring, xml関連 は標準で有効なため除外
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo_mysql \
@@ -54,21 +46,16 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         zip \
         intl
 
-# Redis拡張機能のインストール
 RUN pecl install redis \
     && docker-php-ext-enable redis
 
-# 最終ステージ: 本番イメージ
 FROM base
 
-# ビルドステージから拡張機能をコピー
 COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
-# Composerのインストール
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# PHP設定ファイルのコピー
 COPY ./php/php.ini /usr/local/etc/php/conf.d/custom.ini
 COPY ./php/php-fpm.conf /usr/local/etc/php-fpm.d/zz-custom.conf
 

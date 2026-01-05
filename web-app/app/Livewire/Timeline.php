@@ -13,14 +13,13 @@ class Timeline extends Component
 
     public ?string $selectedGenre = null;
 
-    public int $userId; // 【追加】ユーザーIDプロパティ
+    public int $userId; // ユーザーID
 
     public function mount()
     {
-        $this->userId = Auth::id(); // 【追加】初期化時にIDをセット
+        $this->userId = Auth::id();
     }
 
-    // 動的リスナー定義
     public function getListeners()
     {
         return [
@@ -28,7 +27,6 @@ class Timeline extends Component
             'date-selected' => 'setTargetDate',
             'post-created' => '$refresh',
 
-            // 【修正】イベント名の先頭にドット(.)を付け、broadcastAsで定義した名前を指定
             "echo-private:users.{$this->userId},.reaction.generated" => '$refresh',
         ];
     }

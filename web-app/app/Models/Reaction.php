@@ -17,7 +17,6 @@ class Reaction extends Model
         'response_text',
     ];
 
-    // 投稿とのリレーション
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
