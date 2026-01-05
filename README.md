@@ -1,84 +1,80 @@
-# AI Diary
+---
+# AI Diary - プロジェクト全体ガイド
 
-Laravel 12 + Livewire 3 + Volt を使用した AI 日記アプリケーション
+AI Diaryは「Laravel 12 + Livewire 3 + Volt」によるAI日記アプリケーションです。
 
-## 📋 目次
+## 構成と役割
 
-- [技術スタック](#技術スタック)
-- [想定環境](#想定環境)
-- [開発環境セットアップ](#開発環境セットアップ)
-  - [方法1: Dev Container（推奨）](#方法1-dev-container推奨)
-  - [方法2: ローカルホスト開発](#方法2-ローカルホスト開発)
-  - [方法3: フルDocker環境](#方法3-フルdocker環境)
-- [日常の開発作業](#日常の開発作業)
-- [よく使うコマンド](#よく使うコマンド)
-- [プロジェクト構造](#プロジェクト構造)
-- [トラブルシューティング](#トラブルシューティング)
+- **web-app/** : Laravelアプリ本体（Livewire, Volt, Tailwind, Breeze）
+- **infrastructure/** : 本番/開発用Docker構成（Nginx, PHP-FPM, MySQL, Redis, Queue）
 
 ## 技術スタック
 
-- **バックエンド**: Laravel 12 (PHP 8.2+)
-- **フロントエンド**: Livewire 3 + Volt, Tailwind CSS 3
-- **認証**: Laravel Breeze
-- **データベース**: MySQL 8.0
-- **キャッシュ/キュー**: Redis 7
-- **ビルドツール**: Vite 7
-- **デプロイ**: Docker Compose + Nginx
+- Laravel 12 (PHP 8.2+)
+- Livewire 3 + Volt
+- Tailwind CSS 3
+- Laravel Breeze
+- MySQL 8.0 / Redis 7
+- Vite 7
+- Docker Compose + Nginx
 
 ## 想定環境
 
-このプロジェクトは以下の構成を想定しています：
+- **サーバー**: さくらVPS（Ubuntu）+ Docker
+- **クライアント**: VS Code（Remote-SSH, Dev Container）
 
-- **サーバー**: さくらVPS（Ubuntu）にDocker環境を構築
-- **クライアント**: ローカルPCのVS CodeからSSH接続
-- **開発環境**: VS Code Dev Container で `web-app` ディレクトリを開く
+## 開発・運用フロー
+
+### 1. Dev Container（推奨）
+1. サーバーで `infrastructure/docker-compose.yml` を起動
+2. VS Codeでweb-appをDev Containerとして開く
+3. コンテナ内で `composer setup` → `composer dev` で開発開始
+
+### 2. ローカルホスト開発
+1. web-app配下で `docker compose up -d` でMySQL/Redis/Mailpit起動
+2. `composer setup` → `composer dev` で開発
+
+### 3. 本番/フルDocker
+1. infrastructure配下で `docker compose up -d` で全サービス起動
+2. ブラウザで http://<VPS-IP> へアクセス
+
+## よく使うコマンド
+
+| 作業 | コマンド | ディレクトリ |
+|------|---------|-----------|
+| 開発サーバー起動 | `composer dev` | web-app/ |
+| テスト実行 | `composer test` | web-app/ |
+| DBマイグレーション | `php artisan migrate` | web-app/ |
+| Docker起動 | `docker compose up -d` | infrastructure/ |
+| ログ確認 | `docker compose logs -f app` | infrastructure/ |
+
+## ディレクトリ構成
 
 ```
-[ローカルPC]                    [さくらVPS - Ubuntu]
-VS Code                         Docker Containers
-  ↓ SSH接続                      ├─ app (PHP-FPM)
-  ↓ Dev Container接続            ├─ nginx
-  └─> web-app/                   ├─ db (MySQL)
-      (appコンテナ内で開発)       ├─ redis
-                                 └─ queue
+aiDiary/
+├── web-app/           # Laravelアプリ本体
+│   ├── docker-compose.yml
+│   ├── .devcontainer/
+│   └── ...
+├── infrastructure/    # Docker/Nginx/DB/Queue構成
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   └── nginx/
+└── README.md          # このファイル
 ```
 
-## 開発環境セットアップ
+## 詳細ガイド
 
-このプロジェクトは3つの開発方法をサポートしています。用途に応じて選択してください。
+- [web-app/README.md](web-app/README.md) : Laravelアプリ開発・ローカル運用ガイド
+- [infrastructure/README.md](infrastructure/README.md) : Docker本番運用・サーバー管理ガイド
 
-| 開発方法 | 推奨シーン | 必要なもの |
-|---------|-----------|-----------|
-| **Dev Container** | **通常の開発作業（推奨）** | VS Code + SSH接続可能なサーバー |
-| **ローカルホスト** | PHP環境がローカルにある場合 | PHP 8.2+, Composer, Node.js, Docker |
-| **フルDocker** | 本番環境に近い構成でテスト | サーバー + Docker |
+## トラブルシューティング
+
+- サーバー起動/接続エラー → `docker compose logs` で詳細確認
+- Queue/Job変更時 → `docker compose restart queue` で再起動
+- 権限エラー → DockerfileのUID/GID設定を見直し
 
 ---
-
-### 方法1: Dev Container（推奨）
-
-**さくらVPS（Ubuntu）上でDocker環境を構築し、ローカルのVS CodeからSSH接続して開発する方法です。**
-
-VS Code の Dev Container 機能を使用して、リモートサーバー上のコンテナ内で開発できます。
-
-#### 前提条件
-
-**サーバー側（さくらVPS - Ubuntu）**:
-- Docker / Docker Desktop がインストール済み
-- Docker Compose V2 対応
-- SSH接続可能な状態
-
-**クライアント側（ローカルPC）**:
-- **VS Code** 
-- **Remote - SSH 拡張機能**
-- **Dev Containers 拡張機能**
-
-#### 🎯 初回セットアップ
-
-##### 1. サーバー側の準備（さくらVPS）
-
-SSH接続してサーバー側で実行：
-
 ```bash
 # リポジトリのクローン
 git clone <repository-url>
